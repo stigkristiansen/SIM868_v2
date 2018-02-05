@@ -1,8 +1,8 @@
 <?
 
-require_once(__DIR__ . "/../logging.php");
+require_once(__DIR__ . "/../libs/logging.php");
 
-class SIM868GsmSms extends IPSModule
+class SIM868Sms extends IPSModule
 {
     
     public function Create(){
