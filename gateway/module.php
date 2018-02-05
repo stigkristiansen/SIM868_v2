@@ -150,21 +150,12 @@ class SIM868Gateway_v2 extends IPSModule
 		
 		$state = $this->GetBuffer("SendingInProgress");
 		
-		if($state=="true")
-			$stringValue = "true";
-		else
-			$stringValue = "false";
-		
 		$log->LogMessage("GetInProgress: InProgress flag is \"".$stringValue."\"");
 		
-		return $state;
-		
-		if($stringValue === "true")
+		if($state === "true")
 			return true;
 		else	
 			return false;
-		
-		
 		
 	}
 	
@@ -176,15 +167,15 @@ class SIM868Gateway_v2 extends IPSModule
  			$inProgress = $this->GetInProgress();
 			
 			if($inProgress)
-				$log->LogMessage("InProgress flag is \"true\"");
+				$log->LogMessage("WaitForResponse: InProgress flag is \"true\"");
 			else
-				$log->LogMessage("InProgress flag is \"false\"");
+				$log->LogMessage("WaitForResponse: InProgress flag is \"false\"");
  			 
  			if(!$inProgress) { 
- 				$log->LogMessage("A sending was completed"); 
+ 				$log->LogMessage("WaitForResponse: A sending was completed"); 
  				return true; 
  			} else 
- 				$log->LogMessage("Waiting for sending to complete..."); 
+ 				$log->LogMessage("WaitForResponse: Waiting for sending to complete..."); 
  				 
  			IPS_Sleep(100); 
  		} 
