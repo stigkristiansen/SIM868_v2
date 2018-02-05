@@ -108,7 +108,7 @@ class SIM868Gateway_v2 extends IPSModule
 		
 		$status = false;
 		try{
-			$this-SetInProgress(true);
+			$this->SetInProgress(true);
 			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $buffer)));
 			$status = $this->WaitForResponse(1000);
 				
