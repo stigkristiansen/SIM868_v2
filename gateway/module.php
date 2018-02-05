@@ -136,6 +136,8 @@ class SIM868Gateway_v2 extends IPSModule
 		
 		$this->SetBuffer("SendingInProgress", $State);
 		
+		$log->LogMessage("InProgress flag is set to \"".$stringValue."\"");
+		
 		$this->Unlock("InProgressLock");
 	}
 	
