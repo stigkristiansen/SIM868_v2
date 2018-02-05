@@ -123,19 +123,30 @@ class SIM868Gateway_v2 extends IPSModule
 	private function SetInProgress($State) {
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		
+		if($State)
+			$stringValue = "true";
+		else
+			$stringValue = "false";
+		
 		if (!$this->Lock("InProgressLock")) { 
 			$log->LogMessage("InProgressLock is already locked. Aborting message handling!"); 
             return false;  
 		} else
 			$log->LogMessage("InProgressLock is locked");
 		
-		$this->SetBuffer("InProgressLock", $State);
+		$this->SetBuffer("InProgressLock", $stringValue);
 		
 		$this->Unlock("InProgressLock");
 	}
 	
 	private function GetInProgress() {
-		return $this->GetBuffer("SendingInProgress");
+		$stringValue = $this->GetBuffer("SendingInProgress");
+		
+		if($stringValue === "true")
+			return true;
+		else	
+			return false;
+		
 	}
 	
 	private function WaitForResponse ($Timeout) {
