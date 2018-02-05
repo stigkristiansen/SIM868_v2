@@ -129,6 +129,8 @@ class SIM868Gateway_v2 extends IPSModule
 			$log->LogMessage("InProgressLock is locked");
 		
 		$this->SetBuffer("InProgressLock", $State);
+		
+		$this->Unlock("InProgressLock");
 	}
 	
 	private function GetInProgress() {
