@@ -144,6 +144,8 @@ class SIM868Gateway_v2 extends IPSModule
 		$iteration = intval($Timeout/100);
  		for($x=0;$x<$iteration;$x++) { 
  			$inProgress = $this->GetInProgress();
+			
+			$log->LogMessage("InProgress flag is \"".$inProgress."\"");
  			 
  			if(!$inProgress) { 
  				$log->LogMessage("A sending was completed"); 
