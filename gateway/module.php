@@ -146,7 +146,7 @@ class SIM868Gateway_v2 extends IPSModule
 		
 		$state = (boolean)$this->GetBuffer("SendingInProgress");
 		
-		if($State)
+		if($state)
 			$stringValue = "true";
 		else
 			$stringValue = "false";
