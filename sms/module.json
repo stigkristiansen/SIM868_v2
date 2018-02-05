@@ -1,0 +1,14 @@
+{ 
+    "id" :  "{F5FF5088-9C77-4C84-AA3B-18C6C36BF854}" , 
+    "name" :  "SIM868Sms" , 
+    "type" :  3 , 
+    "vendor" :  "Stig Kristiansen" , 
+    "aliases" : 
+    [ 
+        "SIM868 SMS "  
+    ] ,   
+    "parentRequirements" :  ["{FC5541DE-14A9-4D5C-A3CF-6C769B8832CA}"] , 
+    "childRequirements" :  [] , 
+    "implemented" :  ["{1AD9130C-C5B2-4C0D-9A3F-40D5F1337898}"] , 
+    "prefix" :  "SIM868_SMS" 
+}

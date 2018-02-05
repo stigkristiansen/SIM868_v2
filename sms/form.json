@@ -1,0 +1,41 @@
+{
+    "elements":
+    [
+		{
+			"type": "List",
+			"name": "SMSCommands",
+			"caption": "SMS Commands",
+			"rowCount": 2,
+			"add": true,
+			"delete": true,
+			"sort": {
+				"column": "Command",
+				"direction": "ascending"
+			},
+			"columns": [
+				{
+					"label": "Script",
+					"name": "script", 
+					"width": "75px",
+					"add": 0,
+					"edit": {
+						"type": "SelectScript"
+					}
+				}, {
+					"label": "Command",
+					"name": "command",
+					"width": "auto",
+					"add": "",
+					"edit": {
+						"type": "ValidationTextBox"
+					}
+				}
+			],
+			"values": [
+			]
+		},
+        { "type": "CheckBox", "name": "log", "caption": "Enable logging" }
+    ],
+
+}
+
