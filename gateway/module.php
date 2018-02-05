@@ -142,14 +142,25 @@ class SIM868Gateway_v2 extends IPSModule
 	}
 	
 	private function GetInProgress() {
-		$stringValue = $this->GetBuffer("SendingInProgress");
+		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		
-		return $this->GetBuffer("SendingInProgress");
+		$state = (boolean)$this->GetBuffer("SendingInProgress");
+		
+		if($State)
+			$stringValue = "true";
+		else
+			$stringValue = "false";
+		
+		$log->LogMessage("GetInProgress: InProgress flag is \"".$stringValue."\"");
+		
+		return $state;
 		
 		if($stringValue === "true")
 			return true;
 		else	
 			return false;
+		
+		
 		
 	}
 	
