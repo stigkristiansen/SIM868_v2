@@ -42,7 +42,7 @@ class SIM868SmsV2 extends IPSModule
 			//$message = $this->SendATCommand($readCommand);
 			//$this->SendATCommand($deleteCommand);
 			
-			$log->LogMessage("The incomming message was: ".$message);
+			//$log->LogMessage("The incomming message was: ".$message);
 			
 		} else
 			$log->LogMessage("Unknown command!");
