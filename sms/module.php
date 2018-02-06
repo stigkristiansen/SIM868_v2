@@ -38,7 +38,7 @@ class SIM868SmsV2 extends IPSModule
 			$deleteCommand = "AT+CMGD=".$matches[0][2];
 			$log->LogMessage("Read command is: ".$readCommand);
 			$log->LogMessage("Delete command is: ".$deleteCommand);
-			$this->SendATCommand("AT+CMGF=1");
+			//$this->SendATCommand("AT+CMGF=1");
 			//$message = $this->SendATCommand($readCommand);
 			//$this->SendATCommand($deleteCommand);
 			
