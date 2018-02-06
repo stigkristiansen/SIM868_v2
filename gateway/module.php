@@ -46,6 +46,23 @@ class SIM868Gateway_v2 extends IPSModule
 			$log->LogMessage("Buffer is locked");
 		
 		$log->LogMessage("Buffer is \"".$buffer."\"");
+		
+		$patternsToSearchFor = array(array("pattern" => "/^\r\nOK\r\n$/","forward" => false),
+								     array("pattern" => "/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)$/","forward" => true),
+								     array("pattern" => "/^\r\nERROR\r\n$/","forward" => false),
+								     array("pattern" => "/^\r\nNORMAL POWER DOWN\r\n$/","forward" => false),
+								     array("pattern" => "/^\r\nAT\+CMGR=(\d{1,2}) \+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\" (.+) OK\r\n$/i","forward" => false)
+							);
+							
+		foreach ($patternsToSearchFor as $pattern){
+			$log->LogMessage("Using regex for pattern match: ".$pattern['pattern']);
+			if(preg_match_all($pattern['pattern'], $buffer, $matches, PREG_SET_ORDER, 0)!=0) {
+					$foundMessage = $buffer;
+					$forwardToChildern = $pattern['forward'];
+					break;
+			}
+		}				
+		
 				
 		$wordsToSearchFor = array("\r\nOK\r\n", "\r\n+CMTI: \"SM\",","\r\nERROR\r\n", "\r\nNORMAL POWER DOWN\r\n");
 		foreach ($wordsToSearchFor as $word) {
@@ -62,7 +79,7 @@ class SIM868Gateway_v2 extends IPSModule
 			$buffer = preg_replace("/(\r\n)+|\r+|\n+/i", " ", $buffer);
 			$buffer = trim(preg_replace("/\s+/", " ", $buffer));
 			
-			$log->LogMessage("Found a complete messge \"".$buffer."\"");
+			$log->LogMessage("Found a complete message \"".$buffer."\"");
 									
 			$foundComplete = true;
 			$completeMessage = $buffer;
@@ -79,7 +96,7 @@ class SIM868Gateway_v2 extends IPSModule
 		$this->Unlock("BufferLock"); 
 		
 		if($foundComplete) {
-			//$this->SendDataToChildren(json_encode(Array("DataID" => "{27E8784A-DF07-4142-9C77-281BF411EEB7}", "Buffer" => $completeMessage)));
+			//$this->SendDataToChildren(json_encode(Array("DataID" => "{1AD9130C-C5B2-4C0D-9A3F-40D5F1337898}", "Buffer" => $completeMessage)));
 			$this->SetInProgress(false);
 		}
 		
@@ -228,9 +245,9 @@ class SIM868Gateway_v2 extends IPSModule
 				$log->LogMessage("The parent I/O port is active and supported");
 				return true;
 			} else
-				$log->LogMessageError("The parent I/O port is not supported");
+				$log->LogMessageError("The parent is not supported");
 		} else
-			$log->LogMessageError("The parent I/O port is not active.");
+			$log->LogMessageError("The parent is not active.");
 		
 		return false;
 	}
