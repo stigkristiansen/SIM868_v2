@@ -47,11 +47,11 @@ class SIM868Gateway_v2 extends IPSModule
 		
 		$log->LogMessage("Buffer is \"".$buffer."\"");
 		
-		$patternsToSearchFor = array(array("pattern" => "/\r\nOK\r\n$/","forward" => false),
-								     array("pattern" => "/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/","forward" => true),
+		$patternsToSearchFor = array(array("pattern" => "/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/","forward" => true),
 								     array("pattern" => "/^\r\nERROR\r\n$/","forward" => false),
 								     array("pattern" => "/^\r\nNORMAL POWER DOWN\r\n$/","forward" => false),
-								     array("pattern" => "/^\r\nAT\+CMGR=(\d{1,2}) \+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\" (.+) OK\r\n$/i","forward" => false)
+								     array("pattern" => "/^\r\nAT\+CMGR=(\d{1,2}) \+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\" (.+) OK\r\n$/i","forward" => false),
+									 array("pattern" => "/\r\nOK\r\n$/","forward" => false),
 							);
 							
 		foreach ($patternsToSearchFor as $pattern){
