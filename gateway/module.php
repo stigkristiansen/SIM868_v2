@@ -50,7 +50,7 @@ class SIM868Gateway_v2 extends IPSModule
 		$patternsToSearchFor = array(array("pattern" => "/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/","forward" => true),
 								     array("pattern" => "/^\r\nERROR\r\n$/","forward" => false),
 								     array("pattern" => "/^\r\nNORMAL POWER DOWN\r\n$/","forward" => false),
-								     array("pattern" => "/^AT\+CMGR=(\d{1,2})\r\r\n\+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\"\r\n(.+)\r\n\r\nOK\r\n$/i","forward" => false),
+								     array("pattern" => "/^AT\+CMGR=(\d{1,2})\r\r\n\+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\"\r\n(.+)\r\n\r\nOK\r\n$/i","forward" => true),
 									 array("pattern" => "/\r\nOK\r\n$/","forward" => false),
 							);
 							
@@ -71,35 +71,6 @@ class SIM868Gateway_v2 extends IPSModule
 					break;
 			}
 		}				
-		
-		/*		
-		$wordsToSearchFor = array("\r\nOK\r\n", "\r\n+CMTI: \"SM\",","\r\nERROR\r\n", "\r\nNORMAL POWER DOWN\r\n");
-		foreach ($wordsToSearchFor as $word) {
-			$log->LogMessage("Searching for \"".preg_replace("/(\r\n)+|\r+|\n+/i", " ", $word)."\" in \"".preg_replace("/(\r\n)+|\r+|\n+/i", " ", $buffer)."\"");
-			$length = strlen($buffer)-strlen($word);
-			$pos = strpos($buffer, $word);
-			
-			if($pos!== false)
-				break;
-		}
-		
-		$foundComplete = false;
-		if($pos === $length || ($pos===0 && $word=="\r\n+CMTI: \"SM\"," && substr($buffer, strlen($buffer)-2) === "\r\n" )) {
-			$buffer = preg_replace("/(\r\n)+|\r+|\n+/i", " ", $buffer);
-			$buffer = trim(preg_replace("/\s+/", " ", $buffer));
-			
-			$log->LogMessage("Found a complete message \"".$buffer."\"");
-									
-			$foundComplete = true;
-			$completeMessage = $buffer;
-						
-			$buffer = "";
-			
-		} else {
-			$incomingBuffer = preg_replace("/(\r\n)+|\r+|\n+/i", " ", $incomingBuffer);
-			$log->LogMessage("Received part of message: ", $incomingBuffer);
-		}
-		*/
 		
 		$this->SetBuffer("Buffer", $buffer);
 		
