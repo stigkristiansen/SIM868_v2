@@ -5,7 +5,7 @@
     "vendor" :  "Stig Kristiansen" , 
     "aliases" : 
     [ 
-        "SIM868 SMS "  
+        "SIM868 SMS v2"  
     ] ,   
     "parentRequirements" :  ["{FC5541DE-14A9-4D5C-A3CF-6C769B8832CA}"] , 
     "childRequirements" :  [] , 

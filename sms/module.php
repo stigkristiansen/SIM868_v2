@@ -18,14 +18,14 @@ class SIM868SmsV2 extends IPSModule
         parent::ApplyChanges();
         
         //$this->RegisterVariableString("LastSendt", "LastSendt");
-        $this->RegisterVariableString("Queue", "Queue");
+        //$this->RegisterVariableString("Queue", "Queue");
 		//$this->RegisterVariableString("Buffer", "Buffer");
-		$this->RegisterVariableString("InProgress", "InProgress");
+		//$this->RegisterVariableString("InProgress", "InProgress");
         
         //IPS_SetHidden($this->GetIDForIdent('LastSendt'), true);
-        IPS_SetHidden($this->GetIDForIdent('Queue'), true);
+        //IPS_SetHidden($this->GetIDForIdent('Queue'), true);
 		//IPS_SetHidden($this->GetIDForIdent('Buffer'), true);
-		IPS_SetHidden($this->GetIDForIdent('InProgress'), true);
+		//IPS_SetHidden($this->GetIDForIdent('InProgress'), true);
 		
 		// Create Script
     }
