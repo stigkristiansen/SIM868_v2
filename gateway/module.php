@@ -54,17 +54,24 @@ class SIM868Gateway_v2 extends IPSModule
 									 array("pattern" => "/\r\nOK\r\n$/","forward" => false),
 							);
 							
+		$log->LogMessage("Searching for complete message...");
+		
+		$forwardToChildern = false;
 		foreach ($patternsToSearchFor as $pattern){
 			$log->LogMessage("Using RegEx for pattern match: ".$pattern['pattern']);
 			if(preg_match_all($pattern['pattern'], $buffer, $matches, PREG_SET_ORDER, 0)!=0) {
-					$foundMessage = $buffer;
+					$log->LogMessage("Found complete message using RegEx");
+					
+					$foundCompleteMessage = true;
+					$completeMessage = $buffer;
 					$forwardToChildern = $pattern['forward'];
-					$log->LogMessage("Found using RegEx");
+										
+					$buffer = "";
 					break;
 			}
 		}				
 		
-				
+		/*		
 		$wordsToSearchFor = array("\r\nOK\r\n", "\r\n+CMTI: \"SM\",","\r\nERROR\r\n", "\r\nNORMAL POWER DOWN\r\n");
 		foreach ($wordsToSearchFor as $word) {
 			$log->LogMessage("Searching for \"".preg_replace("/(\r\n)+|\r+|\n+/i", " ", $word)."\" in \"".preg_replace("/(\r\n)+|\r+|\n+/i", " ", $buffer)."\"");
@@ -91,17 +98,19 @@ class SIM868Gateway_v2 extends IPSModule
 			$incomingBuffer = preg_replace("/(\r\n)+|\r+|\n+/i", " ", $incomingBuffer);
 			$log->LogMessage("Received part of message: ", $incomingBuffer);
 		}
+		*/
 		
 		$this->SetBuffer("Buffer", $buffer);
 		
 		$this->Unlock("BufferLock"); 
 		
-		if($foundComplete) {
-			//$this->SendDataToChildren(json_encode(Array("DataID" => "{1AD9130C-C5B2-4C0D-9A3F-40D5F1337898}", "Buffer" => $completeMessage)));
+		if($foundCompleteMessage) {
+			if($forwardToChildern)
+				$this->SendDataToChildren(json_encode(Array("DataID" => "{1AD9130C-C5B2-4C0D-9A3F-40D5F1337898}", "Buffer" => $completeMessage)));
 			$this->SetInProgress(false);
 		}
 		
-		return true;
+		//return true;
     }
 	
 	public function SendCommand(string $Command) {
