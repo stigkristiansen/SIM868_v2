@@ -17,17 +17,6 @@ class SIM868SmsV2 extends IPSModule
     public function ApplyChanges(){
         parent::ApplyChanges();
         
-        //$this->RegisterVariableString("LastSendt", "LastSendt");
-        //$this->RegisterVariableString("Queue", "Queue");
-		//$this->RegisterVariableString("Buffer", "Buffer");
-		//$this->RegisterVariableString("InProgress", "InProgress");
-        
-        //IPS_SetHidden($this->GetIDForIdent('LastSendt'), true);
-        //IPS_SetHidden($this->GetIDForIdent('Queue'), true);
-		//IPS_SetHidden($this->GetIDForIdent('Buffer'), true);
-		//IPS_SetHidden($this->GetIDForIdent('InProgress'), true);
-		
-		// Create Script
     }
 	
 	public function GetSMSCommands(){
@@ -41,14 +30,28 @@ class SIM868SmsV2 extends IPSModule
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		$log->LogMessage("Received data: ".$incomingBuffer); 
 		
+		if(preg_match_all('/\+CMTI: \"(SM|ME)\",([0-9]+)$/', $incomingBuffer, $matches, PREG_SET_ORDER, 0)!=0) {
+			$log->LogMessage("Incoming message. Evaluating...");
+			
+			$readCommand = "AT+CMGR=".$matches[0][2];
+			$deleteCommand = "AT+CMGD=".$matches[0][2];
+			$log->LogMessage("Read command is: ".$readCommand);
+			$log->LogMessage("Delete command is: ".$deleteCommand);
+			$this->SendATCommand("AT+CMGF=1");
+			$message = $this->SendATCommand($readCommand);
+			$this->SendATCommand($deleteCommand);
+			
+			$log->LogMessage("The incomming message was: ".$message);
+			
+		}	
     }
 	
 	private function SendATCommand($Command) {
-		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
+		if(!$this->EvaluateParent())
+			return "ERROR";
 		
 		$log->LogMessage("Sending command \"".$Command."\"to parent gateway...");
 		return $this->SendDataToParent(json_encode(Array("DataID" => "{FC5541DE-14A9-4D5C-A3CF-6C769B8832CA}", "Buffer" => $Command)));
-	
 	}
 	
 	Public function SendCommand(string $Command) {
@@ -56,39 +59,6 @@ class SIM868SmsV2 extends IPSModule
 	}
 	
 		
-	private function Lock($Ident){
-		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
-		for ($i = 0; $i < 100; $i++){
-			if (IPS_SemaphoreEnter($this->BuildSemaphoreName($Ident), 1)){
-				$log->LogMessage("Semaphore ".$ident." is set"); 
-				return true;
-			} else {
-				if($i==0)
-					$log->LogMessage("Waiting for lock...");
-				IPS_Sleep(mt_rand(1, 5));
-			}
-		}
-        
-        $log->LogMessage($ident." is already locked"); 
-        return false;
-    }
-
-    private function Unlock($Ident)
-    {
-        IPS_SemaphoreLeave($this->BuildSemaphoreName($Ident));
-		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
-		$log->LogMessage("Semaphore ".$Ident." is cleared");
-    }
-	
-	private function HasActiveParent(){
-        $instance = IPS_GetInstance($this->InstanceID);
-        if ($instance['ConnectionID'] > 0){
-            $parent = IPS_GetInstance($instance['ConnectionID']);
-            if ($parent['InstanceStatus'] == 102)
-                return true;
-        }
-        return false;
-    }
 	
 	private function EvaluateParent() {
     	$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
