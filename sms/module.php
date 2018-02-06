@@ -47,12 +47,12 @@ class SIM868SmsV2 extends IPSModule
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		
 		$log->LogMessage("Sending command \"".$Command."\"to parent gateway...");
-		$this->SendDataToParent(json_encode(Array("DataID" => "{FC5541DE-14A9-4D5C-A3CF-6C769B8832CA}", "Buffer" => $Command)));
+		return $this->SendDataToParent(json_encode(Array("DataID" => "{FC5541DE-14A9-4D5C-A3CF-6C769B8832CA}", "Buffer" => $Command)));
 	
 	}
 	
 	Public function SendCommand(string $Command) {
-		$this->SendATCommand($Command);
+		return $this->SendATCommand($Command);
 	}
 	
 		
