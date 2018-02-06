@@ -66,6 +66,7 @@ class SIM868Gateway_v2 extends IPSModule
 					$foundCompleteMessage = true;
 					$completeMessage = $buffer;
 					$forwardToChildern = $pattern['forward'];
+					$this->SetBuffer("completemessage", $completeMessage);
 										
 					$buffer = "";
 					break;
@@ -85,8 +86,7 @@ class SIM868Gateway_v2 extends IPSModule
 			$this->SetInProgress(false);
 		}
 		
-		//return true;
-    }
+	}
 	
 	public function SendCommand(string $Command) {
 		if(!$this->EvaluateParent())
@@ -108,18 +108,18 @@ class SIM868Gateway_v2 extends IPSModule
 		$log->LogMessage("Sending command \"".$Command."\"");
 		$buffer = $Command.chr(13).chr(10);
 		
-		$status = false;
+		$return = "ERROR";
 		try{
 			$this->SetInProgress(true);
 			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $buffer)));
-			$status = $this->WaitForResponse(1000);
-				
+			$this->WaitForResponse(1000);
+			$return = $this->GetBuffer("completemessage");	
 		} catch (Exeption $ex) {
 			$log->LogMessageError("Failed to send the command \"".$Command."\" . Error: ".$ex->getMessage());
 			$this->SetInProgress(false);
 		}
 		
-		return $status;
+		return $return;
 	}
 	
 	private function SetInProgress($State) {
