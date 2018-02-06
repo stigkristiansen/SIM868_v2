@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . "/../libs/logging.php");
 
-class SIM868Gateway_v2 extends IPSModule
+class SIM868GatewayV2 extends IPSModule
 {
     
     public function Create()
@@ -50,7 +50,7 @@ class SIM868Gateway_v2 extends IPSModule
 		$patternsToSearchFor = array(array("pattern" => "/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/","forward" => true),
 								     array("pattern" => "/^\r\nERROR\r\n$/","forward" => false),
 								     array("pattern" => "/^\r\nNORMAL POWER DOWN\r\n$/","forward" => false),
-								     array("pattern" => "/^AT\+CMGR=(\d{1,2})\r\r\n\+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\"\r\n(.+)\r\n\r\nOK\r\n$/i","forward" => true),
+								     array("pattern" => "/^AT\+CMGR=(\d{1,2})\r\r\n\+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\"\r\n(.+)\r\n\r\nOK\r\n$/i","forward" => false),
 									 array("pattern" => "/\r\nOK\r\n$/","forward" => false),
 							);
 							
@@ -67,7 +67,7 @@ class SIM868Gateway_v2 extends IPSModule
 					$completeMessage = $buffer;
 					$forwardToChildern = $pattern['forward'];
 					$this->SetBuffer("completemessage", $completeMessage);
-										
+														
 					$buffer = "";
 					break;
 			}
@@ -112,8 +112,8 @@ class SIM868Gateway_v2 extends IPSModule
 		try{
 			$this->SetInProgress(true);
 			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $buffer)));
-			$this->WaitForResponse(1000);
-			$return = $this->GetBuffer("completemessage");	
+			if($this->WaitForResponse(1000))
+				$return = $this->GetBuffer("completemessage");	
 		} catch (Exeption $ex) {
 			$log->LogMessageError("Failed to send the command \"".$Command."\" . Error: ".$ex->getMessage());
 			$this->SetInProgress(false);

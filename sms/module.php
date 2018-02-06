@@ -2,13 +2,13 @@
 
 require_once(__DIR__ . "/../libs/logging.php");
 
-class SIM868Sms extends IPSModule
+class SIM868SmsV2 extends IPSModule
 {
     
     public function Create(){
         parent::Create();
         
-		$this->RequireParent("{B969177D-4A13-40FB-8006-3BF7557FA5F6}");
+		$this->RequireParent("{70F64F80-3F5F-4193-A0CE-9C926AB6EE89}");
         
         $this->RegisterPropertyBoolean ("log", true);
 		$this->RegisterPropertyString("SMSCommands", "");
@@ -40,41 +40,14 @@ class SIM868Sms extends IPSModule
 				
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		$log->LogMessage("Received data: ".$incomingBuffer); 
-				
-		if (!$this->Lock("ReceivedQueue")) { 
-			$log->LogMessage("Queue is already locked. Aborting message handling!"); 
-            return false;  
-		} else
-			$log->LogMessage("Queue is locked");
 		
-		$idQueue = $this->GetIDForIdent('Queue');
-		$json = GetValueString($idQueue);
-		$queue = json_decode($json);
-		$queue[] = $incomingBuffer;
-		$json = json_encode($queue);
-		SetValueString($idQueue, $json);
-		$log->LogMessage("New queue is ".$json);
-				
-		$this->Unlock("ReceivedQueue"); 
-				
-		$parameters = Array("SemaphoreIdent" => $this->BuildSemaphoreName("ReceivedQueue"), "QueueId" => (string) $idQueue);
-		
-		SetValueBoolean($this->GetIDForIdent('InProgress'), false);
-		
-		IPS_RunScriptEx(29268, $parameters);
-		
-		return true;
     }
 	
 	private function SendATCommand($Command) {
-		$this->WaitForResponse(1000);
-		
-		SetValueBoolean($this->GetIDForIdent('InProgress'), true);
-		
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		
 		$log->LogMessage("Sending command \"".$Command."\"to parent gateway...");
-		$this->SendDataToParent(json_encode(Array("DataID" => "{51C4B053-9596-46BE-A143-E3086636E782}", "Buffer" => $Command)));
+		$this->SendDataToParent(json_encode(Array("DataID" => "{FC5541DE-14A9-4D5C-A3CF-6C769B8832CA}", "Buffer" => $Command)));
 	
 	}
 	
@@ -82,32 +55,7 @@ class SIM868Sms extends IPSModule
 		$this->SendATCommand($Command);
 	}
 	
-	private function WaitForResponse ($Timeout) {
-		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		
-		$idInProgress = $this->GetIDForIdent('InProgress');//$this->GetIDForIdent('Buffer');
-		
-		$response=""; 
-		$iteration = intval($Timeout/100);
- 		for($x=0;$x<$iteration;$x++) { 
- 			$response = GetValueBoolean($idInProgress); 
- 			 
- 			if(!$response) { 
- 				$log->LogMessage("A sending was completed"); 
- 				return true; 
- 			} else 
- 				$log->LogMessage("Sending already in use. Waiting..."); 
- 				 
- 			IPS_Sleep(100); 
- 		} 
-
-		return false;
-	}
-	
-	private function BuildSemaphoreName($Ident) {
-		return "GSMSMS_" . (string) $this->InstanceID . (string) $Ident;
-	}
-	
 	private function Lock($Ident){
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		for ($i = 0; $i < 100; $i++){
@@ -147,7 +95,7 @@ class SIM868Sms extends IPSModule
 		
 		$instance = IPS_GetInstance($this->InstanceID);
 		$parentGUID = IPS_GetInstance($instance['ConnectionID'])['ModuleInfo']['ModuleID'];
-		if ($parentGUID == '{B969177D-4A13-40FB-8006-3BF7557FA5F6}') {
+		if ($parentGUID == '{70F64F80-3F5F-4193-A0CE-9C926AB6EE89}') {
 			$log->LogMessage("The parent is supported");
 			return true;
 		} else

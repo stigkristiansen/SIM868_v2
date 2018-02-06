@@ -1,6 +1,6 @@
 { 
     "id" :  "{70F64F80-3F5F-4193-A0CE-9C926AB6EE89}" , 
-    "name" :  "SIM868Gateway_v2" , 
+    "name" :  "SIM868GatewayV2" , 
     "type" :  2 , 
     "vendor" :  "Stig Kristiansen" , 
     "aliases" : 
@@ -10,5 +10,5 @@
     "parentRequirements" :  ["{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"] , 
     "childRequirements" :  ["{1AD9130C-C5B2-4C0D-9A3F-40D5F1337898}"] , 
     "implemented" :  ["{018EF6B5-AB94-40C6-AA53-46943E824ACF}","{FC5541DE-14A9-4D5C-A3CF-6C769B8832CA}"] , 
-    "prefix" :  "SIM868GW_v2" 
+    "prefix" :  "SIM868GWv2" 
 }
