@@ -30,7 +30,7 @@ class SIM868SmsV2 extends IPSModule
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		$log->LogMessage("Received data: ".$incomingBuffer); 
 		
-		if(preg_match_all('/\+CMTI: \"(SM|ME)\",([0-9]+)$/', $incomingBuffer, $matches, PREG_SET_ORDER, 0)!=0) {
+		if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $incomingBuffer, $matches, PREG_SET_ORDER, 0)!=0) {
 			$log->LogMessage("Incoming message. Evaluating...");
 			
 			$readCommand = "AT+CMGR=".$matches[0][2];
@@ -43,7 +43,8 @@ class SIM868SmsV2 extends IPSModule
 			
 			$log->LogMessage("The incomming message was: ".$message);
 			
-		}	
+		} else
+			$log->LogMessage("Unknown command!");
     }
 	
 	private function SendATCommand($Command) {
