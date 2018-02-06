@@ -55,10 +55,11 @@ class SIM868Gateway_v2 extends IPSModule
 							);
 							
 		foreach ($patternsToSearchFor as $pattern){
-			$log->LogMessage("Using regex for pattern match: ".$pattern['pattern']);
+			$log->LogMessage("Using RegEx for pattern match: ".$pattern['pattern']);
 			if(preg_match_all($pattern['pattern'], $buffer, $matches, PREG_SET_ORDER, 0)!=0) {
 					$foundMessage = $buffer;
 					$forwardToChildern = $pattern['forward'];
+					$log->LogMessage("Found using RegEx");
 					break;
 			}
 		}				
