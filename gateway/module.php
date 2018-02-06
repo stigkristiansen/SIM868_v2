@@ -57,6 +57,7 @@ class SIM868Gateway_v2 extends IPSModule
 		$log->LogMessage("Searching for complete message...");
 		
 		$forwardToChildern = false;
+		$foundCompleteMessage = false;
 		foreach ($patternsToSearchFor as $pattern){
 			$log->LogMessage("Using RegEx for pattern match: ".$pattern['pattern']);
 			if(preg_match_all($pattern['pattern'], $buffer, $matches, PREG_SET_ORDER, 0)!=0) {
