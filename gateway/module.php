@@ -106,8 +106,11 @@ class SIM868Gateway_v2 extends IPSModule
 		$this->Unlock("BufferLock"); 
 		
 		if($foundCompleteMessage) {
-			if($forwardToChildern)
+			if($forwardToChildern) {
+				$log->LogMessage("Forwarding complete message to children");
 				$this->SendDataToChildren(json_encode(Array("DataID" => "{1AD9130C-C5B2-4C0D-9A3F-40D5F1337898}", "Buffer" => $completeMessage)));
+			}
+				
 			$this->SetInProgress(false);
 		}
 		
