@@ -22,7 +22,7 @@ if(preg_match_all('/\+CMTI: \"(SM|ME)\",([0-9]+)$/', $arr[$i], $matches, PREG_SE
 
 function LogMessage($Message) {
 	if($log)
-		IPS_Message($moduleName, $Message)
+		IPS_Message($moduleName, $Message);
 }
 	
 ?>
