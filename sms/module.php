@@ -32,24 +32,16 @@ class SIM868SmsV2 extends IPSModule
 				
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		
-		$log->LogMessage("Received data: ".$incomingBuffer); 
+		$log->LogMessage("Received a message: ".$incomingBuffer); 
 		
 		if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $incomingBuffer, $matches, PREG_SET_ORDER, 0)!=0) {
-			$log->LogMessage("Incoming message. Evaluating...");
 			
-			$readCommand = "AT+CMGR=".$matches[0][2];
-			$deleteCommand = "AT+CMGD=".$matches[0][2];
-			$log->LogMessage("Read command is: ".$readCommand);
-			$log->LogMessage("Delete command is: ".$deleteCommand);
-			//$this->SendATCommand("AT+CMGF=1");
-			//$message = $this->SendATCommand($readCommand);
-			//$this->SendATCommand($deleteCommand);
-			
+			$log->LogMessage("Sending the message to dispatch");
+		
 			$parameters = Array("InstanceId" => $this->InstanceID, "Message" => $incomingBuffer, "Log" => $this->ReadPropertyBoolean("log"));
-			
+						
 			IPS_RunScriptEx($this->GetIDForIdent("dispatch"), $parameters);
-			//$log->LogMessage("The incomming message was: ".$message);
-			
+						
 		} else
 			$log->LogMessage("The message is not supported!");
     }
