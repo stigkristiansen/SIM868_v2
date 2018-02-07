@@ -6,7 +6,7 @@ $log = $_IPS['Log'];
 
 $moduleName = IPS_GetObject($moduleInstanceId)['ObjectName'];
 
-if(preg_match_all('/\+CMTI: \"(SM|ME)\",([0-9]+)$/', $arr[$i], $matches, PREG_SET_ORDER, 0)!=0) {
+if(preg_match_all('/\+CMTI: \"(SM|ME)\",([0-9]+)$/', $message, $matches, PREG_SET_ORDER, 0)!=0) {
 	IPS_LogMessage(" Processing incoming message...");
 	$readCommand = "AT+CMGR=".$matches[0][2];
 	$deleteCommand = "AT+CMGD=".$matches[0][2];
