@@ -25,5 +25,5 @@ function LogMessage($Message) {
 		IPS_Message($moduleName, $Message)
 }
 	
-}
+?>
 	
