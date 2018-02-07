@@ -13,7 +13,7 @@ class SIM868SmsV2 extends IPSModule
         $this->RegisterPropertyBoolean ("log", true);
 		$this->RegisterPropertyString("smscommands", "");
 		
-		$script = file_get_contents(__DIR__ . "../libs/_Dispatch.php");
+		$script = file_get_contents(__DIR__ . "/../libs/_Dispatch.php");
 		$this->RegisterScript("dispatch", "_Dispatch", $script, 0);
 	}
 
