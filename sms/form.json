@@ -3,7 +3,7 @@
     [
 		{
 			"type": "List",
-			"name": "SMSCommands",
+			"name": "smscommands",
 			"caption": "SMS Commands",
 			"rowCount": 2,
 			"add": true,
