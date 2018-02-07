@@ -27,27 +27,31 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 		LogMessage("Received SMS is from ".$sender);
 		LogMessage("Received SMS text is ".$smsMessage);
 		
-		$smsCommands = json_decode(GSMS_GetSMSCommands($moduleInstanceId));
+		$smsCommands = json_decode(SIM868SMSv2_GetSMSCommands($moduleInstanceId));
 		$maxCount = count($smsCommands);
 		
 		LogMessage("Analyzing SMS text...");	
 		for ($x=0; $x<$maxCount; $x++) {
-			LogMessage("Checking SMS command: ".$smsCommands[$x]);
-			if($smsMessage == $smsCommands[$x]['command']){
+			LogMessage("Checking SMS command: ".$smsCommands[$x]->command);
+			if($smsMessage == $smsCommands[$x]->command){
 				LogMessage("The SMS is a command");
-				LogMessage("Executing corresponding script: ".$smsCommands[$x]['script']);
-				IPS_RunScriptEx($smsCommands[$x]['script']);
+				LogMessage("Executing corresponding script: ".$smsCommands[$x]->script);
+				if(IPS_RunScript($smsCommands[$x]->script))
+					LogMessage("The corresponding script was executed successfully");
 				break;
 			}	
 		}
 		
-		if($x==maxCount)
-			LogMessage("No corresponding command found for the SMS");
+		if($x==$maxCount)
+			LogMessage("No corresponding command found for the received SMS");
 	} else
 		LogMessage("Unable to analyze the SMS");
 	
 } else
-	LogMessage("Unkonwn message");	
+	LogMessage("Unkonwn message");
+	
+			
+LogMessage("Finished processing incomming message");
 
 return true;
 
@@ -60,3 +64,4 @@ function LogMessage($Message) {
 }
 	
 ?>
+	
