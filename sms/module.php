@@ -11,7 +11,10 @@ class SIM868SmsV2 extends IPSModule
 		$this->RequireParent("{70F64F80-3F5F-4193-A0CE-9C926AB6EE89}");
         
         $this->RegisterPropertyBoolean ("log", true);
-		$this->RegisterPropertyString("SMSCommands", "");
+		$this->RegisterPropertyString("smscommands", "");
+		
+		$script = file_get_contents(__DIR__ . "../libs/_Dispatch.php")
+		$this->RegisterScript("dispatch", "_Dispatch", $script, 0);
 	}
 
     public function ApplyChanges(){
@@ -20,7 +23,7 @@ class SIM868SmsV2 extends IPSModule
     }
 	
 	public function GetSMSCommands(){
-		return $this->ReadPropertyString("SMSCommands");
+		return $this->ReadPropertyString("smscommands");
 	}
 
     public function ReceiveData($JSONString) {
@@ -42,10 +45,13 @@ class SIM868SmsV2 extends IPSModule
 			//$message = $this->SendATCommand($readCommand);
 			//$this->SendATCommand($deleteCommand);
 			
+			$parameters = Array("InstanceId" => $this->InstanceID, "Message" => $incommingBuffer, "Log" => $this->ReadPropertyBoolean("log"));
+			
+			IPS_RunScriptEx(GetIDForIdent("dispatch"), $parameters);
 			//$log->LogMessage("The incomming message was: ".$message);
 			
 		} else
-			$log->LogMessage("Unknown command!");
+			$log->LogMessage("The message is not supported!");
     }
 	
 	private function SendATCommand($Command) {
