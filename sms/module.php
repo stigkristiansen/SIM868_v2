@@ -45,9 +45,9 @@ class SIM868SmsV2 extends IPSModule
 			//$message = $this->SendATCommand($readCommand);
 			//$this->SendATCommand($deleteCommand);
 			
-			$parameters = Array("InstanceId" => $this->InstanceID, "Message" => $incommingBuffer, "Log" => $this->ReadPropertyBoolean("log"));
+			$parameters = Array("InstanceId" => $this->InstanceID, "Message" => $incomingBuffer, "Log" => $this->ReadPropertyBoolean("log"));
 			
-			IPS_RunScriptEx(GetIDForIdent("dispatch"), $parameters);
+			IPS_RunScriptEx($this->GetIDForIdent("dispatch"), $parameters);
 			//$log->LogMessage("The incomming message was: ".$message);
 			
 		} else
