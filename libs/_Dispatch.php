@@ -50,7 +50,7 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 		LogMessage("Analyzing SMS text...");	
 		for ($x=0; $x<$maxCount; $x++) {
 			LogMessage("Checking SMS command: ".$smsCommands[$x]->command);
-			if(preg_match("/^".$smsCommands[$x]->command."$/i", $smsMessage) {
+			if(preg_match("/^".$smsCommands[$x]->command."$/i", $smsMessage)) {
 			//if($smsMessage == $smsCommands[$x]->command){
 				LogMessage("The SMS is a command");
 				LogMessage("Executing corresponding script: ".$smsCommands[$x]->script);
