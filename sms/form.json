@@ -49,7 +49,7 @@
 				{
 					"label": "Phone number",
 					"name": "number", 
-					"width": "100px",
+					"width": "auto",
 					"add": "",
 					"edit": {
 						"type": "ValidationTextBox"
