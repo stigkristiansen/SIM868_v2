@@ -59,7 +59,7 @@
 			],
 			"values": [
 			]
-		}
+		},
         { "type": "CheckBox", "name": "log", "caption": "Enable logging" }
     ],
 
