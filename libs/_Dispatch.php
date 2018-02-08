@@ -54,7 +54,7 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 				LogMessage("The SMS is a command");
 				LogMessage("Executing corresponding script: ".$smsCommands[$x]->script);
 				$parameters = Array("sender"=>$sender, "command"=>$smsMessage);
-				if(IPS_RunScriptEx($smsCommands[$x]->script))
+				if(IPS_RunScriptEx($smsCommands[$x]->script, $parameters))
 					LogMessage("The corresponding script was executed successfully");
 				break;
 			}	
