@@ -33,7 +33,8 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 		LogMessage("Checking if the sender is accepted...");	
 		for ($x=0; $x<$maxCount; $x++) {
 			LogMessage("Checking number: ".$smsSenders[$x]->number);
-			if($sender == $smsSenders[$x]->number){
+			if(preg_match("/^".$smsSenders[$x]->number."$/i", $sender)) {
+			//if($sender == $smsSenders[$x]->number){
 				LogMessage("The number is accepted");
 				break;
 			}	
@@ -51,7 +52,6 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 		for ($x=0; $x<$maxCount; $x++) {
 			LogMessage("Checking SMS command: ".$smsCommands[$x]->command);
 			if(preg_match("/^".$smsCommands[$x]->command."$/i", $smsMessage)) {
-			//if($smsMessage == $smsCommands[$x]->command){
 				LogMessage("The SMS is a command");
 				LogMessage("Executing corresponding script: ".$smsCommands[$x]->script);
 				$parameters = Array("sender"=>$sender, "command"=>$smsMessage);
