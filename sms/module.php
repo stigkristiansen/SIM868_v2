@@ -12,7 +12,8 @@ class SIM868SmsV2 extends IPSModule
         
         $this->RegisterPropertyBoolean ("log", true);
 		$this->RegisterPropertyString("smscommands", "");
-		
+		$this->RegisterPropertyString("smssenders", "");
+				
 		$script = file_get_contents(__DIR__ . "/../libs/_Dispatch.php");
 		$this->RegisterScript("dispatch", "_Dispatch", $script, 0);
 	}
@@ -21,6 +22,10 @@ class SIM868SmsV2 extends IPSModule
         parent::ApplyChanges();
         
     }
+	
+	public function GetSMSAcceptedSenders(){
+		return $this->ReadPropertyString("smssenders");
+	}
 	
 	public function GetSMSCommands(){
 		return $this->ReadPropertyString("smscommands");
