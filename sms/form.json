@@ -34,6 +34,9 @@
 			"values": [
 			]
 		},
+		{ "type": "Label", "instruction1": "Two parameters are passed to the script when it is launched."},
+		{ "type": "Label", "instruction2": "\"Sender\" is the phone number sending the sms"},
+		{ "type": "Label", "instruction3": "\"Command\" is the command sent by the sender"},
 		{
 			"type": "List",
 			"name": "smssenders",
