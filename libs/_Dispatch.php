@@ -33,8 +33,7 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 		LogMessage("Checking if the sender is accepted...");	
 		for ($x=0; $x<$maxCount; $x++) {
 			LogMessage("Checking number: ".$smsSenders[$x]->number);
-			if(preg_match("/^".$smsSenders[$x]->number."$/i", $sender)) {
-			//if($sender == $smsSenders[$x]->number){
+			if($sender == $smsSenders[$x]->number){
 				LogMessage("The number is accepted");
 				break;
 			}	
