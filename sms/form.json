@@ -9,7 +9,7 @@
 			"add": true,
 			"delete": true,
 			"sort": {
-				"column": "Command",
+				"column": "script",
 				"direction": "ascending"
 			},
 			"columns": [
@@ -37,7 +37,7 @@
 		{
 			"type": "List",
 			"name": "smssenders",
-			"caption": "Accepted SMS Senders",
+			"caption": "Allowed SMS Senders",
 			"rowCount": 1,
 			"add": true,
 			"delete": true,
@@ -51,7 +51,6 @@
 					"name": "number", 
 					"width": "100px",
 					"add": "",
-					
 					"edit": {
 						"type": "ValidationTextBox"
 					}

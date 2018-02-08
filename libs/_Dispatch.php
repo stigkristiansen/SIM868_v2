@@ -27,6 +27,23 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 		LogMessage("Received SMS is from ".$sender);
 		LogMessage("Received SMS text is ".$smsMessage);
 		
+		$smsSenders = json_decode(SIM868SMSv2_GetSMSAcceptedSenders($moduleInstanceId));
+		$maxCount = count($smsSenders);
+		
+		LogMessage("Checking if the sender is accepted...");	
+		for ($x=0; $x<$maxCount; $x++) {
+			LogMessage("Checking numbrt: ".$smsSenders[$x]->number);
+			if($sender == $smsSenders[$x]->command){
+				LogMessage("The number is accepted");
+				break;
+			}	
+		}
+		
+		if($x==$maxCount) {
+			LogMessage("The sender was not accepted");
+			exit;
+		}
+		
 		$smsCommands = json_decode(SIM868SMSv2_GetSMSCommands($moduleInstanceId));
 		$maxCount = count($smsCommands);
 		
