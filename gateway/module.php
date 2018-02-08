@@ -52,7 +52,8 @@ class SIM868GatewayV2 extends IPSModule
 								     array("pattern" => "/^\r\nNORMAL POWER DOWN\r\n$/","forward" => false),
 								     array("pattern" => "/^AT\+CMGR=(\d{1,2})\r\r\n\+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\"\r\n(.+)\r\n\r\nOK\r\n$/i","forward" => false),
 									 array("pattern" => "/\r\nOK\r\n$/","forward" => false),
-									 array("pattern" => "/^AT\+CMGS=\"\d+\".+>$/is","forward" => false)
+									 array("pattern" => "/^AT\+CMGS=\"\d+\"\R>$/is","forward" => false)
+																				
 									);
 							
 		$log->LogMessage("Searching for complete message...");
