@@ -52,8 +52,8 @@ class SIM868GatewayV2 extends IPSModule
 								     array("pattern" => "/^\r\nNORMAL POWER DOWN\r\n$/","forward" => false),
 								     array("pattern" => "/^AT\+CMGR=(\d{1,2})\r\r\n\+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\"\r\n(.+)\r\n\r\nOK\r\n$/i","forward" => false),
 									 array("pattern" => "/\r\nOK\r\n$/","forward" => false),
-									 array("pattern" => "/^AT\+CMGS=\"\d+\"\R>$/is","forward" => false)
-																				
+									 array("pattern" => "/^AT\+CMGS=\"\d+\"\R\R> $/i","forward" => false),
+									 array("pattern" => "/^\R> $/","forward" => false)
 									);
 							
 		$log->LogMessage("Searching for complete message...");
@@ -118,7 +118,8 @@ class SIM868GatewayV2 extends IPSModule
 			$this->SetInProgress(true);
 			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $buffer)));
 			if($this->WaitForResponse(1000))
-				$return = $this->GetBuffer("completemessage");	
+				$return = $this->GetBuffer("completemessage");
+				
 		} catch (Exeption $ex) {
 			$log->LogMessageError("Failed to send the command \"".$Command."\" . Error: ".$ex->getMessage());
 			$this->SetInProgress(false);
@@ -187,6 +188,7 @@ class SIM868GatewayV2 extends IPSModule
  			IPS_Sleep(100); 
  		} 
 		
+		$this->SendingInProgress(false);
 		return false;
 	}
 
