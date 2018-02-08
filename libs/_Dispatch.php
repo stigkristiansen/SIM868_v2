@@ -67,7 +67,7 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 		LogMessage("Unable to analyze the SMS");
 	
 } else
-	LogMessage("Unkonwn message");
+	LogMessage("Unknown message");
 	
 			
 LogMessage("Finished processing incomming message");
