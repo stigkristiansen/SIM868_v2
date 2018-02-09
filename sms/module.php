@@ -30,6 +30,18 @@ class SIM868SmsV2 extends IPSModule
 	public function GetSMSCommands(){
 		return $this->ReadPropertyString("smscommands");
 	}
+	
+	Public function SendCommand(string $Command) {
+		return $this->SendATCommand($Command);
+	}
+		
+	public function SendSMS(string $Receiver, string $Message) {
+		$this->SendATCommand("AT");
+		$this->SendATCommand("ATE0");
+		$this->SendATCommand("AT+CMGF=1");
+		$this->SendATCommand("AT+CMGS=\"".$Receiver."\"");
+		$this->SendATCommand($Message.chr(0x1a));
+	}
 
     public function ReceiveData($JSONString) {
 		$incomingData = json_decode($JSONString);
@@ -40,15 +52,13 @@ class SIM868SmsV2 extends IPSModule
 		$log->LogMessage("Received a message: ".$incomingBuffer); 
 		
 		if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $incomingBuffer, $matches, PREG_SET_ORDER, 0)!=0) {
-			
 			$log->LogMessage("Sending the message to dispatch");
 		
 			$parameters = Array("InstanceId" => $this->InstanceID, "Message" => $incomingBuffer, "Log" => $this->ReadPropertyBoolean("log"));
-						
 			IPS_RunScriptEx($this->GetIDForIdent("dispatch"), $parameters);
 						
 		} else
-			$log->LogMessage("The message is not supported!");
+			$log->LogMessage("The incoming message is not supported!");
     }
 	
 	private function SendATCommand($Command) {
@@ -61,11 +71,7 @@ class SIM868SmsV2 extends IPSModule
 		return $this->SendDataToParent(json_encode(Array("DataID" => "{FC5541DE-14A9-4D5C-A3CF-6C769B8832CA}", "Buffer" => $Command)));
 	}
 	
-	Public function SendCommand(string $Command) {
-		return $this->SendATCommand($Command);
-	}
 	
-		
 	
 	private function EvaluateParent() {
     	$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));

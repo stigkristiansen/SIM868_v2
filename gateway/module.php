@@ -52,18 +52,17 @@ class SIM868GatewayV2 extends IPSModule
 								     array("pattern" => "/^\r\nNORMAL POWER DOWN\r\n$/","forward" => false),
 								     array("pattern" => "/^AT\+CMGR=(\d{1,2})\r\r\n\+CMGR: \"REC.+\",\"(.+)\",\"\",\".+\"\r\n(.+)\r\n\r\nOK\r\n$/i","forward" => false),
 									 array("pattern" => "/\r\nOK\r\n$/","forward" => false),
-									 array("pattern" => "/^AT\+CMGS=\"\d+\"\R\R> $/i","forward" => false),
 									 array("pattern" => "/^\R> $/","forward" => false)
 									);
 							
-		$log->LogMessage("Searching for complete message...");
-		//AT+CMGS="95064534"<CR><CR><LF>> 
+		$log->LogMessage("Searching for a complete message...");
+		 
 		$forwardToChildern = false;
 		$foundCompleteMessage = false;
 		foreach ($patternsToSearchFor as $pattern){
 			$log->LogMessage("Using RegEx for pattern match: ".$pattern['pattern']);
 			if(preg_match_all($pattern['pattern'], $buffer, $matches, PREG_SET_ORDER, 0)!=0) {
-					$log->LogMessage("Found complete message using RegEx");
+					$log->LogMessage("Found a complete message using RegEx");
 					
 					$foundCompleteMessage = true;
 					$completeMessage = $buffer;
@@ -83,7 +82,7 @@ class SIM868GatewayV2 extends IPSModule
 			$this->SetInProgress(false);
 			
 			if($forwardToChildern) {
-				$log->LogMessage("Forwarding complete message to children");
+				$log->LogMessage("Forwarding the complete message to the children");
 				$this->SendDataToChildren(json_encode(Array("DataID" => "{1AD9130C-C5B2-4C0D-9A3F-40D5F1337898}", "Buffer" => $completeMessage)));
 				$log->LogMessage("Forwarding complete message to children completed");
 			}
@@ -117,7 +116,7 @@ class SIM868GatewayV2 extends IPSModule
 		try{
 			$this->SetInProgress(true);
 			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $buffer)));
-			if($this->WaitForResponse(1000))
+			if($this->WaitForResponse(10000))
 				$return = $this->GetBuffer("completemessage");
 				
 		} catch (Exeption $ex) {
