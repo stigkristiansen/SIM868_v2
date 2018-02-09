@@ -113,7 +113,7 @@ class SIM868GatewayV2 extends IPSModule
 		try{
 			$this->SetInProgress(true);
 			$this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => $buffer)));
-			if($this->WaitForResponse($this->ReadPropertyInteger("timeout")))
+			if($this->WaitForResponse($this->ReadPropertyInteger("timeout")*1000))
 				$return = $this->GetBuffer("completemessage");
 				
 		} catch (Exeption $ex) {
@@ -184,7 +184,7 @@ class SIM868GatewayV2 extends IPSModule
  			IPS_Sleep(100); 
  		} 
 		
-		$this->SendingInProgress(false);
+		$this->SetInProgress(false);
 		return false;
 	}
 
