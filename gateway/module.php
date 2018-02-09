@@ -12,6 +12,7 @@ class SIM868GatewayV2 extends IPSModule
         
         $this->RegisterPropertyBoolean ("log", true);
 		$this->RegisterPropertyString ("pin", "");
+		$this->RegisterPropertyInteger ("timeout", 10);
     }
 
     public function ApplyChanges(){
@@ -60,9 +61,9 @@ class SIM868GatewayV2 extends IPSModule
 		$forwardToChildern = false;
 		$foundCompleteMessage = false;
 		foreach ($patternsToSearchFor as $pattern){
-			$log->LogMessage("Using RegEx for pattern match: ".$pattern['pattern']);
+			$log->LogMessage("Using regular expression for pattern matching: ".$pattern['pattern']);
 			if(preg_match_all($pattern['pattern'], $buffer, $matches, PREG_SET_ORDER, 0)!=0) {
-					$log->LogMessage("Found a complete message using RegEx");
+					$log->LogMessage("Found a complete message");
 					
 					$foundCompleteMessage = true;
 					$completeMessage = $buffer;
@@ -75,7 +76,6 @@ class SIM868GatewayV2 extends IPSModule
 		}				
 		
 		$this->SetBuffer("Buffer", $buffer);
-		
 		$this->Unlock("BufferLock"); 
 		
 		if($foundCompleteMessage) {
@@ -86,10 +86,7 @@ class SIM868GatewayV2 extends IPSModule
 				$this->SendDataToChildren(json_encode(Array("DataID" => "{1AD9130C-C5B2-4C0D-9A3F-40D5F1337898}", "Buffer" => $completeMessage)));
 				$log->LogMessage("Forwarding complete message to children completed");
 			}
-				
-			
 		}
-		
 	}
 	
 	public function SendCommand(string $Command) {

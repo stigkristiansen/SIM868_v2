@@ -1,6 +1,7 @@
 {
     "elements":
     [
+	{ "type": "NumberSpinner", "name": "timeout", "caption": "Modem timeout (seconds)"},
 	{ "type": "CheckBox", "name": "log", "caption": "Enable logging" }
     ],
 
