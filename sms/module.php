@@ -51,7 +51,7 @@ class SIM868SmsV2 extends IPSModule
 		
 	}
 	
-	public function EnablePinCode(string PinCode, boolean $State) {
+	public function EnablePinCode(string $PinCode, boolean $State) {
 		
 	}
 
