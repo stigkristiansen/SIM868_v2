@@ -42,6 +42,18 @@ class SIM868SmsV2 extends IPSModule
 		$this->SendATCommand("AT+CMGS=\"".$Receiver."\"");
 		$this->SendATCommand($Message.chr(0x1a));
 	}
+	
+	public function OpenSim(string $PinCode) {
+		
+	}
+	
+	public function ChangeSimCode(string $OldPinCode, string $NewPinCode) {
+		
+	}
+	
+	public function EnablePinCode(string PinCode, boolean $State) {
+		
+	}
 
     public function ReceiveData($JSONString) {
 		$incomingData = json_decode($JSONString);
