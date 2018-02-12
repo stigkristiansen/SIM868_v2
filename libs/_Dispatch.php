@@ -50,12 +50,12 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 		LogMessage("Analyzing SMS text...");	
 		for ($x=0; $x<$maxCount; $x++) {
 			LogMessage("Checking SMS command: ".$smsCommands[$x]->command);
-			if(preg_match("/^".$smsCommands[$x]->command."$/i", $smsMessage)) {
+			if(preg_match("/^".trim($smsCommands[$x]->command)."$/i", trim($smsMessage))) {
 				LogMessage("The SMS is a command");
 				LogMessage("Executing corresponding script: ".$smsCommands[$x]->script);
-				$parameters = Array("sender"=>$sender, "command"=>$smsMessage);
+				$parameters = Array("Sender"=>$sender, "Command"=>$smsMessage, "InstanceId"=>$moduleInstanceId);
 				if(IPS_RunScriptEx($smsCommands[$x]->script, $parameters))
-					LogMessage("The corresponding script was executed successfully");
+					LogMessage("The corresponding script was started");
 				break;
 			}	
 		}
@@ -69,7 +69,7 @@ if(preg_match_all('/^\r\n\+CMTI: \"(SM|ME)\",([0-9]+)\r\n$/', $message, $matches
 	LogMessage("Unknown message");
 	
 			
-LogMessage("Finished processing incomming message");
+LogMessage("Finished processing incoming message");
 
 return true;
 
