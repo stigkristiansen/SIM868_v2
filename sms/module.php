@@ -36,11 +36,13 @@ class SIM868SmsV2 extends IPSModule
 	}
 		
 	public function SendSMS(string $Receiver, string $Message) {
+		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		$this->SendATCommand("AT");
 		$this->SendATCommand("ATE0");
 		$this->SendATCommand("AT+CMGF=1");
 		$this->SendATCommand("AT+CMGS=\"".$Receiver."\"");
-		$this->SendATCommand($Message.chr(0x1a));
+		$result = $this->SendATCommand($Message.chr(0x1a));
+		$log->LogMessage("Sending SMS returned ". $result);
 	}
 	
 	public function OpenSim(string $PinCode) {
@@ -51,7 +53,7 @@ class SIM868SmsV2 extends IPSModule
 		
 	}
 	
-	public function EnablePinCode(string $PinCode, boolean $State) {
+	public function EnablePinCode(string $PinCode, bool $State) {
 		
 	}
 

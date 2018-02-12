@@ -182,8 +182,9 @@ class SIM868GatewayV2 extends IPSModule
  				$log->LogMessage("WaitForResponse: Waiting for sending to complete..."); 
  				 
  			IPS_Sleep(100); 
- 		} 
+ 		}
 		
+		$log->LogMessage("WaitForResponse: Waiting timed out!");
 		$this->SetInProgress(false);
 		return false;
 	}
